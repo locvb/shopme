@@ -81,6 +81,12 @@ public class Category {
         this.parent = parent;
     }
 
+    public Category(Integer id, String name, String alias) {
+        this.id = id;
+        this.name = name;
+        this.alias = alias;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -142,5 +148,18 @@ public class Category {
         if (this.id == null) return "/images/image-thumbnail.png";
 
         return "/category-images/" + this.id + "/" + this.image;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", alias='" + alias + '\'' +
+                ", image='" + image + '\'' +
+                ", enabled=" + enabled +
+                ", parent=" + parent +
+                ", children=" + children +
+                '}';
     }
 }
