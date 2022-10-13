@@ -32,6 +32,17 @@
     [[${label}]]
 </a>
 
+<div th:fragment="category_actions" th:remove="tag">
+    <a class="fa-solid fa-pen-to-square fa-2x icon-green" th:href="@{'/categories/edit/' + ${category.id}}"
+       title="Edit this category"></a>
+    &nbsp;
+    <th:block th:if="${category.hasChildren == false}">
+        <a class="fa-solid fa-trash fa-2x icon-dark link-delete"
+           th:href="@{'/categories/delete/' + ${category.id}}"
+           title="Delete this category"
+           th:entityId="${category.id}"></a>
+    </th:block>
+</div>
 
 </body>
 </html>

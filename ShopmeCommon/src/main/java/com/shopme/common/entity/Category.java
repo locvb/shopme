@@ -29,6 +29,9 @@ public class Category {
     @OneToMany(mappedBy = "parent")
     private Set<Category> children = new HashSet<>();
 
+    @Transient
+    private boolean hasChildren = false;
+
     public Category() {
     }
 
@@ -55,7 +58,7 @@ public class Category {
         copyCategory.setImage(category.getImage());
         copyCategory.setAlias(category.getAlias());
         copyCategory.setEnabled(category.isEnabled());
-
+        copyCategory.setHasChildren(!category.getChildren().isEmpty());
         return copyCategory;
     }
 
@@ -141,6 +144,14 @@ public class Category {
 
     public void setChildren(Set<Category> children) {
         this.children = children;
+    }
+
+    public boolean hasChildren() {
+        return hasChildren;
+    }
+
+    public void setHasChildren(boolean hasChildren) {
+        this.hasChildren = hasChildren;
     }
 
     @org.springframework.data.annotation.Transient

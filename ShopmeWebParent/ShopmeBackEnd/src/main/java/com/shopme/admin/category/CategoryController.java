@@ -1,6 +1,7 @@
 package com.shopme.admin.category;
 
 import com.shopme.admin.FileUploadUtil;
+import com.shopme.admin.user.UserNotFoundException;
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -100,4 +101,18 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
+    @GetMapping("/categories/delete/{id}")
+    public String deleteUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            service.delete(id);
+            FileUploadUtil.removeDir("../category-images/" + id);
+            redirectAttributes.addFlashAttribute(
+                    "message",
+                    "The category ID " + id + " has been deleted successfully"
+            );
+        } catch (CategoryNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("message", ex.getMessage());
+        }
+        return "redirect:/categories";
+    }
 }
