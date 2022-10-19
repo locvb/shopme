@@ -2,6 +2,9 @@ package com.shopme.admin.category;
 
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +14,8 @@ import java.util.*;
 @Service
 @Transactional
 public class CategoryService {
+    private static final int ROOT_CATEGORY_PER_PAGE = 4;
+
     private CategoryRepository repo;
 
     @Autowired
@@ -18,7 +23,7 @@ public class CategoryService {
         this.repo = repo;
     }
 
-    public List<Category> listAll(String sortDir) {
+    public List<Category> listByPage(CategoryPageInfo pageInfo, int pageNum, String sortDir) {
         Sort sort = Sort.by("name");
         if (sortDir.equals("asc")) {
             sort = sort.ascending();
@@ -26,7 +31,14 @@ public class CategoryService {
             sort = sort.descending();
         }
 
-        List<Category> rootCategories = repo.listRootCategories(sort);
+        Pageable pageable = PageRequest.of(pageNum - 1, ROOT_CATEGORY_PER_PAGE, sort);
+
+        Page<Category> pageCategories = repo.listRootCategories(pageable);
+        List<Category> rootCategories = pageCategories.getContent();
+
+        pageInfo.setTotalPages(pageCategories.getTotalPages());
+        pageInfo.setTotalElements(pageCategories.getTotalElements());
+
         return listHierarchicalCategories(rootCategories, sortDir);
     };
 

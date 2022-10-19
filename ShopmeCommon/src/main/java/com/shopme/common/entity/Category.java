@@ -154,6 +154,10 @@ public class Category {
         this.hasChildren = hasChildren;
     }
 
+    public boolean isHasChildren() {
+        return hasChildren;
+    }
+
     @org.springframework.data.annotation.Transient
     public String getImagePath() {
         if (this.id == null) return "/images/image-thumbnail.png";
