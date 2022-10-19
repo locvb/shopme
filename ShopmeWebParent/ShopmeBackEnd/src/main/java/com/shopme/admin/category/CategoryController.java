@@ -2,6 +2,7 @@ package com.shopme.admin.category;
 
 import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.user.UserNotFoundException;
+import com.shopme.admin.user.UserService;
 import com.shopme.common.entity.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -28,25 +29,40 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    public String listFirstPage(@Param("sortDir") String sortDir, Model model) {
-      return listByPage(1, sortDir, model);
+    public String listFirstPage(@Param("sortDir") String sortDir,
+                                Model model) {
+      return listByPage(1, sortDir, null, model);
     }
 
     @GetMapping("/categories/page/{pageNum}")
-    public String listByPage(@PathVariable(name = "pageNum") int pageNum, @Param("sortDir") String sortDir, Model model) {
+    public String listByPage(@PathVariable(name = "pageNum") int pageNum,
+                             @Param("sortDir") String sortDir,
+                             @Param("keyword") String keyword,
+                             Model model) {
         if (sortDir == null || sortDir.isEmpty()) {
             sortDir = "asc";
         }
 
+
         CategoryPageInfo pageInfo = new CategoryPageInfo();
-        List<Category> categories = service.listByPage(pageInfo, pageNum, sortDir);
+        List<Category> categories = service.listByPage(pageInfo, pageNum, sortDir, keyword);
+
+        long startCount = (pageNum - 1) * CategoryService.ROOT_CATEGORY_PER_PAGE + 1;
+        long endCount = startCount + CategoryService.ROOT_CATEGORY_PER_PAGE - 1;
+        if (endCount > pageInfo.getTotalElements()) {
+            endCount = pageInfo.getTotalElements();
+        }
+
         String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 
         model.addAttribute("totalPages", pageInfo.getTotalPages());
         model.addAttribute("totalItems", pageInfo.getTotalElements());
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("sortField", "name");
         model.addAttribute("sortDir", sortDir);
+        model.addAttribute("keyword", keyword);
 
         model.addAttribute("listCategories", categories);
         model.addAttribute("reverseSortDir", reverseSortDir);
