@@ -1,4 +1,4 @@
-package com.shopme.admin.user.export;
+package com.shopme.admin;
 
 import com.shopme.common.entity.User;
 
@@ -9,10 +9,10 @@ import java.util.Date;
 import java.util.List;
 
 public class AbstractExporter {
-    public void setResponseHeader(HttpServletResponse response, String contentType, String extension) {
+    public void setResponseHeader(HttpServletResponse response, String contentType, String extension, String modulePrefix) {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         String timestamp = dateFormatter.format(new Date());
-        String filename = "users_" + timestamp + extension;
+        String filename = modulePrefix + timestamp + extension;
 
         response.setContentType(contentType);
         String headerKey = "Content-Disposition";
