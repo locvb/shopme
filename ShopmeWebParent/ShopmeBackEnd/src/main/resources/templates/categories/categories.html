@@ -11,26 +11,17 @@
         <a th:href="@{/categories/export/csv}" class="fa-solid fa-file-csv fa-2x icon-dark mr-2"></a>
     </div>
 
-    <div th:if="${message != null}" class="alert alert-success text-center">
-        [[${message}]]
-    </div>
-
-    <div th:replace="fragments :: search_form('/categories/page/1')"></div>
+    <div th:replace="fragments :: search_form_and_message('/categories/page/1')"></div>
 
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
-                <th>
-                <th th:replace="fragments :: column_link('id', 'ID', 'tag')"></th>
-                </th>
+                <th>ID</th>
                 <th>Category Image</th>
-                <th>
-                    <a class="text-white" th:href="@{'/categories/page/' + ${currentPage} + '?sortDir=' + ${reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''}}">Category Name</a>
-                    <span th:class="${reverseSortDir == 'desc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
-                </th>
-                <th th:replace="fragments :: column_link('alias', 'Alias', 'none')" class="hideable-column"></th>
-                <th th:replace="fragments :: column_link('enabled', 'Enabled', 'none')"></th>
+                <th th:replace="fragments :: column_link('/categories', 'name', 'Category Name', 'none')"></th>
+                <th class="hideable-column">Alias</th>
+                <th>Enabled</th>
                 <th></th>
             </tr>
             </thead>
@@ -43,13 +34,15 @@
                 <td>[[${category.name}]]</td>
                 <td class="hideable-column">[[${category.alias}]]</td>
                 <td>
-                    <a th:if="${category.enabled == true}" class="fa-solid fa-regular fa-circle-check fa-2x icon-green"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Disable this category"></a>
-                    <a th:if="${category.enabled == false}" class="fa-solid fa-regular fa-circle fa-2x icon-dark"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Enable this category"></a>
+                    <div th:replace="fragments :: status(${category.enabled}, 'category', '/categories/' + ${category.id})"></div>
                 </td>
                 <td>
-                    <th:block th:replace="fragments :: category_actions"></th:block>
+                    <div th:replace="fragments :: edit('category', '/categories/edit/' + ${category.id})"></div>
+                    <div th:replace="fragments :: delete('category',
+                                                        '/categories/delete/' + ${category.id},
+                                                        ${category.hasChildren == false},
+                                                        ${category.id})"
+                    ></div>
                 </td>
             </tr>
             </tbody>
@@ -65,11 +58,16 @@
             <div class="col-8">
                 <div>[[${category.name}]]</div>
                 <div class="mt-2">
-                    <a th:if="${category.enabled == true}" class="fa-solid fa-regular fa-circle-check fa-2x icon-green"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/false'}" title="Disable this category"></a>
-                    <a th:if="${category.enabled == false}" class="fa-solid fa-regular fa-circle fa-2x icon-dark"
-                       th:href="@{'/categories/' + ${category.id} + '/enabled/true'}" title="Enable this category"></a>
-                    <th:block th:replace="fragments :: category_actions"></th:block>
+                    <div th:replace="fragments :: status(${category.enabled}, 'category', '/categories/' + ${category.id})"></div>
+
+                    <div th:replace="fragments :: edit('category', '/categories/edit/' + ${category.id})"></div>
+                    <div th:replace="fragments :: delete('category',
+                                                        '/categories/delete/' + ${category.id},
+                                                        ${category.hasChildren == false},
+                                                        ${category.id})"
+                    ></div>
+
+
                 </div>
             </div>
             <div>&nbsp;</div>
