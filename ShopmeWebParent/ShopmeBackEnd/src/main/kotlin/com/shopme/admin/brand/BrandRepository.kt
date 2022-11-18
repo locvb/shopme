@@ -5,4 +5,6 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface BrandRepository : PagingAndSortingRepository<Brand?, Int?>
+interface BrandRepository : PagingAndSortingRepository<Brand, Int> {
+    fun getBrandByName(name: String): Brand?
+}

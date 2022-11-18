@@ -18,9 +18,9 @@ class Brand {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "brands_categories", joinColumns = [JoinColumn(name = "brand_id")], inverseJoinColumns = [JoinColumn(name = "category_id")])
-    private val categories: Set<Category> = HashSet()
+    val categories: MutableSet<Category> = HashSet()
 
-    constructor(name: String?, logo: String?) {
+    constructor(name: String?, logo: String? = "brand-logo.png") {
         this.name = name
         this.logo = logo
     }
