@@ -40,10 +40,8 @@ class Brand {
                 '}'
     }
 
-
-
     @Transient
     fun getLogoPath(): String? {
-        return if (id == null) "/images/image-thumbnail.png" else "/brand-images/" + id + "/" + this.logo
+        return if (id == null) "/images/image-thumbnail.png" else "/brand-images/${id}/${logo}"
     }
 }
