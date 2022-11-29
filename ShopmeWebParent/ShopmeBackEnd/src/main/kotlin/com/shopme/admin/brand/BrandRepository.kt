@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface BrandRepository : PagingAndSortingRepository<Brand, Int> {
+    override fun findAll(): List<Brand>
+
     fun getBrandByName(name: String): Brand?
 }

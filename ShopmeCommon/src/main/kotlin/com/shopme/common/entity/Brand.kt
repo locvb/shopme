@@ -1,6 +1,6 @@
 package com.shopme.common.entity
 
-import com.shopme.common.entity.Category
+import org.springframework.data.annotation.Transient
 import javax.persistence.*
 
 @Entity
@@ -17,7 +17,11 @@ class Brand {
     var logo: String? = null
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "brands_categories", joinColumns = [JoinColumn(name = "brand_id")], inverseJoinColumns = [JoinColumn(name = "category_id")])
+    @JoinTable(
+        name = "brands_categories",
+        joinColumns = [JoinColumn(name = "brand_id")],
+        inverseJoinColumns = [JoinColumn(name = "category_id")]
+    )
     val categories: MutableSet<Category> = HashSet()
 
     constructor(name: String?, logo: String? = "brand-logo.png") {
@@ -34,5 +38,12 @@ class Brand {
                 ", logo='" + logo + '\'' +
                 ", categories=" + categories +
                 '}'
+    }
+
+
+
+    @Transient
+    fun getLogoPath(): String? {
+        return if (id == null) "/images/image-thumbnail.png" else "/brand-images/" + id + "/" + this.logo
     }
 }
