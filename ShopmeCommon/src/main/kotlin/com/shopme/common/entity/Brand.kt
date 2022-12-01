@@ -22,7 +22,7 @@ class Brand {
         joinColumns = [JoinColumn(name = "brand_id")],
         inverseJoinColumns = [JoinColumn(name = "category_id")]
     )
-    val categories: MutableSet<Category> = HashSet()
+    var categories: MutableSet<Category> = HashSet()
 
     constructor(name: String?, logo: String? = "brand-logo.png") {
         this.name = name
