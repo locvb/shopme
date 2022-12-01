@@ -34,4 +34,20 @@ class BrandService {
 
         brandRepository.deleteById(id)
     }
+
+    fun checkUnique(id: Int?, name: String?): String {
+        val isCreatingNew = (id == null || id == 0)
+
+        val brand = brandRepository.getBrandByName(name)
+        if (isCreatingNew) {
+            brand?.let { return "DuplicateName"}
+        }
+        else {
+            if (brand != null && brand.id != id) {
+                return "DuplicateName"
+            }
+        }
+
+        return "OK"
+    }
 }

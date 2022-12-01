@@ -173,8 +173,8 @@ public class Category {
                 ", alias='" + alias + '\'' +
                 ", image='" + image + '\'' +
                 ", enabled=" + enabled +
-                ", parent=" + parent +
-                ", children=" + children +
+//                ", parent=" + parent +
+//                ", children=" + children +
                 '}';
     }
 }

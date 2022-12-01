@@ -69,6 +69,29 @@
 </div>
 <script type="text/javascript">
     moduleURL = "[[@{/brands}]]";
+    function checkUnique(form) {
+        let id = $("#id").val();
+        let name = $("#name").val();
+
+        let csrf = $("input[name='_csrf']").val()
+        let url = "[[@{/brands/check_unique}]]";
+
+        let params = {id, name, _csrf: csrf }
+
+        $.post(url, params, function (response) {
+            if (response == "OK") {
+                form.submit();
+            } else if (response == "DuplicateName") {
+                showWarningModal("There is another brand having same name " + name);
+            } else {
+                showErrorModal("Unknown response from server");
+            }
+        }).fail(function () {
+            showErrorModal("Could not connect to the server");
+        })
+
+        return false;
+    }
     $(document).ready(function () {
         dropdownCategories = $("#categories");
         divChosenCategories = $("#chosenCategories")

@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository
 interface BrandRepository : PagingAndSortingRepository<Brand, Int> {
     override fun findAll(): List<Brand>
 
-    fun getBrandByName(name: String): Brand?
+    fun getBrandByName(name: String?): Brand?
     fun countById(id: Int): Long
 }
